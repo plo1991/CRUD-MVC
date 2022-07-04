@@ -1,0 +1,80 @@
+﻿@model ProjetoAspNetMVC02.Models.ClientConsultModel
+@using ProjetoAspNetMVC02.Entities
+@{
+    Layout = null;
+    var clients = TempData["Consult"] as List<Client>;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Consult</title>
+    <!-- CSS FILES-->
+    <!-- CSS FILES-->
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <div class="container mt-5">
+        <h5>Client Consult</h5>
+        <a href="/Home/Index">Home</a>
+
+        <hr />
+        @using (Html.BeginForm("Consult", "Client", FormMethod.Post, new { @class = "col-md-3" }))
+        {
+            <label>Search by client name: </label>
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            <span class="text-danger">
+                @Html.ValidationMessageFor(model => model.Name)
+            </span>
+            <br />
+
+            <input type="submit" name="Search" value="Search Client" class="btn btn-success" />
+            <br />
+            <br />
+        }
+
+        <h5>@TempData["Messege"]</h5>
+        <table class="table table-bordered table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Client name</th>
+                    <th>Email</th>
+                    <th>Registration date</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in clients)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>@item.RegistrationData</td>
+                        <td>
+                            <a href="/Client/Edit?id=@item.ClientID" class="btn btn-primary btn-sm">
+                                Alter
+                            </a>
+                            <a href="/Client/Delete?id=@item.ClientID" class="btn btn-danger btn-sm" onclick="return confirm('Do you want delete the client @item.Name ?')">
+                                Delete
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        Amount of clients: @clients.Count
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- JS FILES-->
+    <link href="~/js/bootstrap.js" rel="stylesheet" />
+</body>
+</html>
